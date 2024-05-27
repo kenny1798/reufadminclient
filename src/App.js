@@ -1,23 +1,33 @@
-import logo from './logo.svg';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
+import { useAuthContext } from './hooks/useAuthContext';
+import logo from './component/image/reuf-white.jpg'
+
+import Home from './pages/Home';
+import SignIn from './pages/SignIn';
+import { useState } from 'react';
 
 function App() {
+
+  const {user} = useAuthContext();
+  const location = useLocation();
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='row justify-content-center'>
+        <div className='col text-center'>
+        <img src={logo} className='' width={150} />
+        </div>
+      </div>
+      <div>
+        <Routes>
+
+          <Route path='/' element={!user ? <Navigate to="/signin" state={{from: location}} replace /> : <Home /> } />
+
+          <Route path='/signin' element={user ? <Navigate to="/" state={{from: location}} replace /> : <SignIn /> } />
+
+        </Routes>
+      </div>
     </div>
   );
 }
